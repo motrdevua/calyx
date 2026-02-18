@@ -1,3 +1,4 @@
+import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
@@ -9,5 +10,11 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
+  },
+  resolve: {
+    alias: {
+      // Ось цей рядок каже Vite, що символ '@' означає папку './src'
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
 });
