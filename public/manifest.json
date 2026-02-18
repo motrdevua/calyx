@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Calyx Tab",
+  "short_name": "Calyx Tab",
+  "version": "1.0.0",
+  "description": "A beautiful New Tab page built with Vue 3",
+  "permissions": ["storage", "bookmarks", "unlimitedStorage"],
+  "host_permissions": [
+    "https://api.coingecko.com/*",
+    "https://api.openverse.engineering/*",
+    "https://api.openverse.org/*",
+    "https://wallhaven.cc/*",
+    "https://*.wallhaven.cc/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Hope"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

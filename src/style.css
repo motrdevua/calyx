@@ -1,0 +1,157 @@
+@font-face {
+  font-weight: 900;
+  font-style: normal;
+  font-family: "Orbitron";
+  src: url("./assets/fonts/Orbitron-Black.ttf");
+}
+
+@font-face {
+  font-weight: 800;
+  font-style: normal;
+  font-family: "Orbitron";
+  src: url("./assets/fonts/Orbitron-ExtraBold.ttf");
+}
+
+@font-face {
+  font-weight: 700;
+  font-style: normal;
+  font-family: "Orbitron";
+  src: url("./assets/fonts/Orbitron-Bold.ttf");
+}
+
+@font-face {
+  font-weight: 600;
+  font-style: normal;
+  font-family: "Orbitron";
+  src: url("./assets/fonts/Orbitron-SemiBold.ttf");
+}
+
+@font-face {
+  font-weight: 500;
+  font-style: normal;
+  font-family: "Orbitron";
+  src: url("./assets/fonts/Orbitron-Medium.ttf");
+}
+
+@font-face {
+  font-weight: 400;
+  font-style: normal;
+  font-family: "Orbitron";
+  src: url("./assets/fonts/Orbitron-Regular.ttf");
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #000000;
+  font-family: "Orbitron", "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #ffffff;
+  overflow: hidden;
+  user-select: none;
+}
+
+ul[class],
+ol[class] {
+  padding: 0;
+  list-style: none;
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Global Button Styles */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  outline: none;
+  /* Removal of overflow: hidden to prevent glow clipping */
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+  background: rgba(29, 162, 252, 0.05);
+  border-color: rgba(29, 162, 252, 0.3);
+  color: #1da2fc;
+}
+
+.btn-primary:hover {
+  background: rgba(29, 162, 252, 0.2);
+  border-color: #1da2fc;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(29, 162, 252, 0.5);
+}
+
+.btn-danger {
+  background: rgba(255, 71, 87, 0.05);
+  border-color: rgba(255, 71, 87, 0.3);
+  color: #ff4757;
+}
+
+.btn-danger:hover {
+  background: rgba(255, 71, 87, 0.15);
+  border-color: #ff4757;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: #666;
+  text-decoration: none;
+  padding: 4px 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-text:hover {
+  color: #1da2fc;
+  background: rgba(29, 162, 252, 0.05);
+}
+
+/* Border Animation Utility - Redefined as Neon Glow */
+.animate-border {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.animate-border:hover {
+  border-color: #1da2fc;
+  box-shadow: 0 0 15px rgba(29, 162, 252, 0.4);
+  transform: scale(1.02);
+}
