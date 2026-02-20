@@ -33,7 +33,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { useCrypto } from "../composables/useCrypto";
+import { useCrypto } from "@/composables/useCrypto";
 
 const { coins } = useCrypto();
 const tooltipItem = ref(null);

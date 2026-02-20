@@ -1,7 +1,6 @@
 <template>
   <div class="quick-links-container">
     <div class="quick-links" :class="{ loading: isLoading }">
-      <Loader :manual="true" :loading="isLoading" />
       <div
         class="links-wrapper"
         :class="{ 'is-dragging': dragIndex !== null }"
@@ -223,18 +222,17 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useLinks } from "../composables/useLinks";
-import Modal from "./Modal.vue";
-import Loader from "./Loader.vue";
+import { useLinks } from "@/composables/useLinks";
+import Modal from "@/components/Modal.vue";
 import {
   validateUrl,
   extractName,
   getDomain,
   commonSites,
   checkUrlExistence,
-} from "../utils/helpers";
-import { API_ENDPOINTS, UI_CONSTANTS } from "../config";
-import { ICONS } from "../assets/icons";
+} from "@/utils/helpers";
+import { API_ENDPOINTS, UI_CONSTANTS } from "@/config";
+import { ICONS } from "@/assets/icons";
 
 const { links, isLoading, addLink, editLink, removeLink, reorderLinks } =
   useLinks();

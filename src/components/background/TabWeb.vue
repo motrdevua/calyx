@@ -63,7 +63,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { useWallhaven } from "../../composables/useWallhaven";
+import { useWallhaven } from "@/composables/useWallhaven";
 
 const emit = defineEmits(["select"]);
 const {

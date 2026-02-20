@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { ICONS } from "../../assets/icons";
+import { ICONS } from "@/assets/icons";
 
 const emit = defineEmits(["upload"]);
 const isDraggingOver = ref(false);

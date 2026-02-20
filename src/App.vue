@@ -19,14 +19,14 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import Loader from "./components/Loader.vue";
-import Clock from "./components/Clock.vue";
-import QuickLinks from "./components/QuickLinks.vue";
+import Loader from "@/components/Loader.vue";
+import Clock from "@/components/Clock.vue";
+import QuickLinks from "@/components/QuickLinks.vue";
 // import CryptoPrices from "./components/CryptoPrices.vue";
-import BackgroundSettings from "./components/BackgroundSettings.vue";
-import { useBackground } from "./composables/useBackground";
+import BackgroundSettings from "@/components/BackgroundSettings.vue";
+import { useBackground } from "@/composables/useBackground";
 // Import main background to get path
-import defaultBg from "./assets/img/bg.jpg";
+import defaultBg from "@/assets/img/bg.jpg";
 
 const isLoaded = ref(false);
 const settingsRef = ref(null);
@@ -38,7 +38,6 @@ const handleContextMenu = () => {
   }
 };
 
-// Computed background style to verify validity and fallbacks
 // Computed background style to verify validity and fallbacks
 const bgStyle = computed(() => {
   const common = {
@@ -68,7 +67,7 @@ const bgStyle = computed(() => {
 });
 
 onMounted(async () => {
-  const minLoadTime = new Promise((resolve) => setTimeout(resolve, 1500));
+  const minLoadTime = new Promise((resolve) => setTimeout(resolve, 1000));
 
   const imgLoad = new Promise((resolve) => {
     // Determine what URL we are trying to load

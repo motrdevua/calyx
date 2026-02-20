@@ -1,5 +1,5 @@
 import { ref, shallowRef } from 'vue';
-import { API_ENDPOINTS, DEFAULT_DATA } from '../config';
+import { API_ENDPOINTS, DEFAULT_DATA } from '@/config';
 
 const TOPICS = DEFAULT_DATA.WALLPAPER_TOPICS;
 

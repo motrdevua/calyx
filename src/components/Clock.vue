@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { useTime } from "../composables/useTime";
+import { useTime } from "@/composables/useTime";
 
 const daysList = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const { time, currentDay } = useTime();

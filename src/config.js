@@ -3,9 +3,9 @@
  */
 
 export const STORAGE_KEYS = {
-  LINKS: 'vue-extension-quick-links',
-  BACKGROUND: 'vue-extension-background',
-  COLLECTION: 'vue-extension-collection',
+  LINKS: 'calyx-quick-links',
+  BACKGROUND: 'calyx-background',
+  COLLECTION: 'calyx-collection',
 };
 
 export const API_ENDPOINTS = {
@@ -64,5 +64,15 @@ export const UI_CONSTANTS = {
     PRIMARY: '#1da2fc',
     DANGER: '#ff4757',
     SUCCESS: '#2ed573',
+    // Вот этот массив нужен нашему лоадеру для 7 лепестков
+    RAINBOW: [
+      '#FF4D4D',
+      '#FF9E4D',
+      '#F9FF4D',
+      '#4DFF4D',
+      '#4DFFFF',
+      '#4D4DFF',
+      '#9E4DFF',
+    ],
   },
 };

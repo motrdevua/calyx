@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import { UI_CONSTANTS } from '../config';
+import { UI_CONSTANTS } from '@/config';
 
 export function useTime() {
   const time = ref({ hours: '00', minutes: '00', seconds: '00' });

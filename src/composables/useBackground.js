@@ -1,6 +1,6 @@
 import { ref, onMounted, watch } from 'vue';
-import { storage } from '../utils/storage';
-import { STORAGE_KEYS } from '../config';
+import { storage } from '@/utils/storage';
+import { STORAGE_KEYS } from '@/config';
 
 const STORAGE_KEY = STORAGE_KEYS.BACKGROUND;
 const COLLECTION_KEY = STORAGE_KEYS.COLLECTION;

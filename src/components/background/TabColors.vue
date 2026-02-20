@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { useBackground } from "../../composables/useBackground";
+import { useBackground } from "@/composables/useBackground";
 
 const { generateGradient } = useBackground();
 </script>

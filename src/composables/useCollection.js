@@ -1,6 +1,6 @@
 import { ref, onMounted } from 'vue';
-import { storage } from '../utils/storage';
-import { STORAGE_KEYS } from '../config';
+import { storage } from '@/utils/storage';
+import { STORAGE_KEYS } from '@/config';
 
 const COLLECTION_KEY = STORAGE_KEYS.COLLECTION;
 

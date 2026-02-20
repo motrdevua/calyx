@@ -1,7 +1,3 @@
-/**
- * Centralized SVG Icon path data and viewBoxes.
- */
-
 export const ICONS = {
   PLUS: {
     viewBox: '0 0 24 24',

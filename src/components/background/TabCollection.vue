@@ -86,8 +86,8 @@
 
 <script setup>
 import { ref } from "vue";
-import { useCollection } from "../../composables/useCollection";
-import { ICONS } from "../../assets/icons";
+import { useCollection } from "@/composables/useCollection";
+import { ICONS } from "@/assets/icons";
 
 defineEmits(["select"]);
 const { collection, removeFromCollection } = useCollection();

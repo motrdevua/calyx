@@ -1,4 +1,4 @@
-import { DEFAULT_DATA } from '../config';
+import { DEFAULT_DATA } from '@/config';
 
 /**
  * Popular websites for autocomplete suggestions.

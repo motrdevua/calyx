@@ -74,14 +74,14 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import Modal from "./Modal.vue";
-import TabWeb from "./background/TabWeb.vue";
-import TabCollection from "./background/TabCollection.vue";
-import TabUpload from "./background/TabUpload.vue";
-import TabColors from "./background/TabColors.vue";
-import { useBackground } from "../composables/useBackground";
-import { useCollection } from "../composables/useCollection";
-import { ICONS } from "../assets/icons";
+import Modal from "@/components/Modal.vue";
+import TabWeb from "@/components/background/TabWeb.vue";
+import TabCollection from "@/components/background/TabCollection.vue";
+import TabUpload from "@/components/background/TabUpload.vue";
+import TabColors from "@/components/background/TabColors.vue";
+import { useBackground } from "@/composables/useBackground";
+import { useCollection } from "@/composables/useCollection";
+import { ICONS } from "@/assets/icons";
 
 const showModal = ref(false);
 const activeTab = ref("web");

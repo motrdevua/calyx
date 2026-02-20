@@ -1,9 +1,9 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import { API_ENDPOINTS, DEFAULT_DATA } from '../config';
+import { API_ENDPOINTS, DEFAULT_DATA } from '@/config';
 
 export function useCrypto() {
   const getImageUrl = (path) => {
-    return new URL(`../assets/img/svg/white/${path}`, import.meta.url).href;
+    return new URL(`@/assets/img/svg/white/${path}`, import.meta.url).href;
   };
 
   const coins = ref(

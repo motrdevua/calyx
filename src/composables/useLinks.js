@@ -1,6 +1,6 @@
 import { ref, onMounted } from 'vue';
-import { storage } from '../utils/storage';
-import { STORAGE_KEYS, DEFAULT_DATA } from '../config';
+import { storage } from '@/utils/storage';
+import { STORAGE_KEYS, DEFAULT_DATA } from '@/config';
 
 const STORAGE_KEY = STORAGE_KEYS.LINKS;
 const defaultLinks = DEFAULT_DATA.QUICK_LINKS;
