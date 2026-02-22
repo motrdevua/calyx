@@ -80,19 +80,21 @@ img {
   align-items: center;
   justify-content: center;
   padding: 10px 20px;
-  border-radius: 6px;
   font-family: "Orbitron", sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid rgba(255, 255, 255, 0.15);
   outline: none;
   /* Removal of overflow: hidden to prevent glow clipping */
   text-decoration: none;
   background: rgba(0, 0, 0, 0.4);
   color: rgba(255, 255, 255, 0.9);
   letter-spacing: 0.5px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
 }
 
 .btn:hover {
@@ -147,7 +149,7 @@ img {
 .animate-border {
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .animate-border:hover {

@@ -3,6 +3,12 @@
     <Loader :manual="true" :loading="!isLoaded" />
     <BackgroundSettings ref="settingsRef" />
 
+    <ControlCenter />
+
+    <WeatherWidget v-if="showWeather" />
+
+    <NotesWidget v-if="showNotes" />
+
     <div
       class="wrapper"
       v-show="isLoaded"
@@ -10,9 +16,9 @@
       :style="bgStyle"
       @contextmenu.prevent="handleContextMenu"
     >
-      <Clock />
-      <QuickLinks />
-      <!-- <CryptoPrices /> -->
+      <Clock v-if="showClock" />
+
+      <QuickLinks v-if="showLinks" />
     </div>
   </div>
 </template>
@@ -22,15 +28,25 @@ import { ref, onMounted, computed } from "vue";
 import Loader from "@/components/Loader.vue";
 import Clock from "@/components/Clock.vue";
 import QuickLinks from "@/components/QuickLinks.vue";
-// import CryptoPrices from "./components/CryptoPrices.vue";
+import WeatherWidget from "@/components/WeatherWidget.vue";
 import BackgroundSettings from "@/components/BackgroundSettings.vue";
+import NotesWidget from "@/components/NotesWidget.vue";
+// import CryptoPrices from "./components/CryptoPrices.vue";
+
+// НОВОЕ: Импортируем компонент ControlCenter и логику настроек
+import ControlCenter from "@/components/ControlCenter.vue";
+import { useWidgets } from "@/composables/useWidgets";
+
 import { useBackground } from "@/composables/useBackground";
-// Import main background to get path
 import defaultBg from "@/assets/img/bg.jpg";
 
 const isLoaded = ref(false);
 const settingsRef = ref(null);
 const { currentBackground } = useBackground();
+
+// НОВОЕ: Достаем реактивные переменные для показа/скрытия виджетов
+const { showClock, showWeather, showLinks, showNotes, showSeconds } =
+  useWidgets();
 
 const handleContextMenu = () => {
   if (settingsRef.value) {
@@ -38,31 +54,26 @@ const handleContextMenu = () => {
   }
 };
 
-// Computed background style to verify validity and fallbacks
 const bgStyle = computed(() => {
   const common = {
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
-    backgroundAttachment: "fixed", // Optional: parallax-like feel, ensures coverage
+    backgroundAttachment: "fixed",
   };
 
-  // 1. Priority: User selected background
   if (currentBackground.value && currentBackground.value !== "undefined") {
-    // If it's a gradient, size/position might not matter as much, but 'cover' is fine
     return {
       ...common,
-      backgroundImage: currentBackground.value, // Changed from background to backgroundImage to prevent shorthand reset
+      backgroundImage: currentBackground.value,
     };
   }
-  // 2. Fallback: Default Image
   if (defaultBg) {
     return {
       ...common,
       backgroundImage: `url(${defaultBg})`,
     };
   }
-  // 3. Last Resort: Black
   return { background: "#000" };
 });
 
@@ -70,17 +81,14 @@ onMounted(async () => {
   const minLoadTime = new Promise((resolve) => setTimeout(resolve, 1000));
 
   const imgLoad = new Promise((resolve) => {
-    // Determine what URL we are trying to load
     let urlToLoad = defaultBg;
 
-    // Check if currentBackground is a URL
     if (currentBackground.value && currentBackground.value.includes("url(")) {
       const match = currentBackground.value.match(/url\(['"]?(.*?)['"]?\)/);
       if (match && match[1]) {
         urlToLoad = match[1];
       }
     } else if (currentBackground.value) {
-      // It's a gradient or invalid
       resolve();
       return;
     }
@@ -93,7 +101,7 @@ onMounted(async () => {
     const img = new Image();
     img.src = urlToLoad;
     img.onload = resolve;
-    img.onerror = resolve; // Fail safe
+    img.onerror = resolve;
   });
 
   await Promise.all([minLoadTime, imgLoad]);

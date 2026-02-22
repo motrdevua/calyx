@@ -1,11 +1,11 @@
 <template>
   <div class="bg-settings-container">
     <button
-      class="settings-btn"
+      class="settings-btn animate-border"
       @click="toggleModal"
+      @mousemove="handleMouseMove"
       title="Background Settings"
     >
-      <!-- Gear Icon (Lucide/Standard) -->
       <svg
         width="24"
         height="24"
@@ -44,26 +44,36 @@
               class="btn-tab"
               :class="{ active: activeTab === tab.id }"
               @click="activeTab = tab.id"
+              @mousemove="handleMouseMove"
             >
               {{ tab.label }}
             </button>
           </div>
 
-          <component
-            :is="activeTabComponent"
-            @select="handleSelect"
-            @upload="handleUpload"
-          />
+          <transition name="fade" mode="out-in">
+            <component
+              :is="activeTabComponent"
+              @select="handleSelect"
+              @upload="handleUpload"
+            />
+          </transition>
         </div>
       </template>
 
-      <!-- Footer Buttons -->
       <template #footer>
         <div class="modal-footer-actions">
-          <button class="btn animate-border" @click="resetToDefault">
+          <button
+            class="btn animate-border"
+            @click="resetToDefault"
+            @mousemove="handleMouseMove"
+          >
             Reset to Default
           </button>
-          <button class="btn btn-primary animate-border" @click="saveAndClose">
+          <button
+            class="btn btn-primary animate-border"
+            @click="saveAndClose"
+            @mousemove="handleMouseMove"
+          >
             Done
           </button>
         </div>
@@ -115,7 +125,6 @@ const closeModal = async () => {
 const handleSelect = async (wp) => {
   const bgValue = `url(${wp.full})`;
   previewBackground("image", bgValue);
-  // Store selected wallpaper but don't add to collection yet
   pendingWp.value = wp;
 };
 
@@ -139,11 +148,19 @@ const saveAndClose = async () => {
   pendingWp.value = null;
 };
 
+// Эффект Фонарика (Spotlight)
+const handleMouseMove = (e) => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  e.currentTarget.style.setProperty("--x", `${x}px`);
+  e.currentTarget.style.setProperty("--y", `${y}px`);
+};
+
 defineExpose({ toggleModal });
 </script>
 
-<style>
-/* Keeping core styles but scoped to the container or moved to global if needed */
+<style scoped>
 .bg-settings-container {
   position: fixed;
   bottom: 20px;
@@ -157,11 +174,9 @@ defineExpose({ toggleModal });
   gap: 12px;
   padding: 5px 0;
 }
-
 .brand-logo-small {
   filter: drop-shadow(0 0 8px rgba(29, 162, 252, 0.4));
 }
-
 .brand-name {
   font-family: "Orbitron", sans-serif;
   font-size: 1.25rem;
@@ -173,10 +188,9 @@ defineExpose({ toggleModal });
   -webkit-text-fill-color: transparent;
 }
 
+/* ОБНОВЛЕННАЯ КНОПКА ШЕСТЕРЕНКИ (Glassmorphism + Spotlight) */
 .settings-btn {
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  color: #1da2fc;
+  color: #fff;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -186,13 +200,36 @@ defineExpose({ toggleModal });
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.settings-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    60px circle at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.25),
+    transparent 100%
+  );
+}
+.settings-btn:hover::after {
+  opacity: 1;
 }
 
 .settings-btn:hover {
-  background: rgba(29, 162, 252, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border-color: #1da2fc;
   transform: rotate(90deg) scale(1.1);
-  box-shadow: 0 0 15px rgba(29, 162, 252, 0.4);
+  box-shadow: 0 0 25px rgba(29, 162, 252, 0.4);
+  color: #1da2fc;
 }
 
 .settings-content {
@@ -201,138 +238,143 @@ defineExpose({ toggleModal });
   gap: 20px;
   min-width: 650px;
   max-width: 800px;
-  height: 520px; /* Fixed height to prevent jitter */
+  height: 520px;
 }
 
+/* Вкладки */
 .tabs {
   display: flex;
   gap: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 5px 5px 20px 5px; /* Extra padding for glow */
+  padding: 5px 5px 20px 5px;
   flex-shrink: 0;
 }
 
 .btn-tab {
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.05);
-  color: #888;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #aaa;
   padding: 8px 18px;
   cursor: pointer;
   font-family: inherit;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 6px;
   font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.btn-tab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    60px circle at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.15),
+    transparent 100%
+  );
+}
+.btn-tab:hover::after {
+  opacity: 1;
 }
 
 .btn-tab:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
 }
-
 .btn-tab.active {
-  color: #1da2fc;
-  background: rgba(29, 162, 252, 0.1);
-  border-color: rgba(29, 162, 252, 0.5);
-  box-shadow: 0 0 15px rgba(29, 162, 252, 0.2);
+  color: #fff;
+  background: rgba(29, 162, 252, 0.15);
+  border-color: #1da2fc;
+  box-shadow: 0 0 15px rgba(29, 162, 252, 0.3);
 }
 
 .tab-panel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevent panel itself from scrolling, child grid will scroll */
+  overflow: hidden;
 }
 
-/* Animations */
+/* АНИМАЦИИ ВНУТРИ */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+  transform: translateY(5px);
 }
 
-/* The styles for wallpaper-item and action-btn have been moved to their respective Tab components */
-.mini-loader {
-  width: 30px;
-  height: 30px;
-  border: 2px solid #1da2fc;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: rotate 1s linear infinite;
+/* ФУТЕР И ОБЩИЕ КНОПКИ (Идентично QuickLinks) */
+.modal-footer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
-.empty-msg {
-  text-align: center;
-  color: #888;
-  margin: 20px 0;
-}
-
-.wallpaper-item:hover,
-.wallpaper-item.selected {
-  transform: scale(1.05);
-  border-color: #1da2fc;
-  box-shadow: 0 0 8px rgba(29, 162, 252, 0.4);
-}
-
-.wallpaper-item.skeleton {
-  background: rgba(255, 255, 255, 0.05);
+.btn {
   position: relative;
   overflow: hidden;
-  cursor: default;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+  font-family: inherit;
+  backdrop-filter: blur(12px);
 }
-
-.wallpaper-item.skeleton::after {
+.btn::after {
   content: "";
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0,
-    rgba(255, 255, 255, 0.03) 20%,
-    rgba(255, 255, 255, 0.06) 60%,
-    rgba(255, 255, 255, 0)
-  );
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
+  inset: 0;
+  pointer-events: none;
   opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    80px circle at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.2),
+    transparent 100%
+  );
+}
+.btn:hover::after {
+  opacity: 1;
 }
 
-.refresh-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
-  color: #888;
+.btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+.btn-primary {
+  background: rgba(29, 162, 252, 0.2);
+  color: #1da2fc;
+  border-color: rgba(29, 162, 252, 0.4);
+}
+.btn-primary:hover {
+  background: #1da2fc;
+  color: #fff;
+  border-color: #1da2fc;
+  box-shadow: 0 0 15px rgba(29, 162, 252, 0.4);
 }
 
+/* ЗОНА ЗАГРУЗКИ И ПРОЧЕЕ (Адаптация под фрост) */
 .upload-zone {
-  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
   padding: 40px 20px;
   text-align: center;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -341,70 +383,77 @@ defineExpose({ toggleModal });
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(4px);
 }
-
 .upload-zone:hover,
 .upload-zone.dragging-over {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border-color: #1da2fc;
-  box-shadow: inset 0 0 20px rgba(29, 162, 252, 0.1);
+  box-shadow: inset 0 0 20px rgba(29, 162, 252, 0.15);
 }
-
 .upload-zone.dragging-over {
   transform: scale(1.02);
 }
-
 .upload-icon {
   color: #1da2fc;
   margin-bottom: 8px;
   transition: transform 0.3s;
 }
-
 .upload-zone:hover .upload-icon {
   transform: translateY(-5px);
 }
-
 .upload-zone h3 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
   color: #fff;
 }
-
 .upload-zone p {
   margin: 0;
   font-size: 14px;
-  color: #888;
+  color: #aaa;
 }
-
 .file-info {
   font-size: 12px;
   color: #1da2fc;
   margin-top: 10px;
-  background: rgba(29, 162, 252, 0.1);
+  background: rgba(29, 162, 252, 0.15);
   padding: 4px 12px;
   border-radius: 12px;
-}
-
-.modal-footer-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  font-weight: 500;
 }
 
 .preview-box {
   width: 100%;
   height: 50px;
   margin-top: 10px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
-
 .note {
-  font-size: 10px;
-  color: #666;
+  font-size: 11px;
+  color: #888;
   margin-top: 5px;
   text-align: right;
+}
+.empty-msg {
+  text-align: center;
+  color: #aaa;
+  margin: 20px 0;
+  font-size: 14px;
+}
+.mini-loader {
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(29, 162, 252, 0.3);
+  border-top-color: #1da2fc;
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

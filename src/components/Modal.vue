@@ -8,6 +8,7 @@
       class="modal-content"
       @mouseenter="$emit('peek:stop')"
       @mouseleave="$emit('peek:start')"
+      @mousemove="handleMouseMove"
     >
       <header v-if="$slots.header">
         <slot name="header"></slot>
@@ -25,6 +26,8 @@
 </template>
 
 <script setup>
+import { useSpotlight } from "@/composables/useSpotlight";
+
 const props = defineProps({
   peek: {
     type: Boolean,
@@ -33,70 +36,114 @@ const props = defineProps({
 });
 
 defineEmits(["close", "peek:start", "peek:stop"]);
+
+// ИСПОЛЬЗУЕМ ОБЩИЙ КОМПОЗАБЛ
+const { handleMouseMove } = useSpotlight();
 </script>
 
 <style scoped>
+/* --- ФОН (Оверлей) --- */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  /* Мягкое затемнение и глубокое размытие */
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 5000;
   animation: fadeIn 0.3s ease;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* Состояние "Подглядывания" */
 .modal-backdrop.is-peeking {
-  background: rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(0px);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
+/* --- САМА МОДАЛКА (Стекло) --- */
 .modal-content {
-  background: rgba(18, 18, 18, 0.85);
-  border: 1.5px solid rgba(29, 162, 252, 0.15);
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5), 0 0 20px rgba(29, 162, 252, 0.05);
-  backdrop-filter: blur(20px) saturate(180%);
-  padding: 24px;
-  border-radius: 12px;
+  position: relative;
+  /* Glassmorphism */
+  background: rgba(30, 30, 30, 0.65);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  padding: 30px;
+  border-radius: 24px;
   min-width: 320px;
   max-width: 90%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   color: white;
-  animation: slideUp 0.3s ease;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: auto; /* Ensure events always fire */
+
+  animation: modalZoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: auto;
+  overflow: hidden; /* Важно для обрезки фонарика по краям */
 }
 
+/* Эффект Фонарика (Spotlight) - УМЕНЬШЕНО до 150px */
+.modal-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(
+    150px circle at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.08),
+    transparent 100%
+  );
+  z-index: -1;
+}
+.modal-content:hover::after {
+  opacity: 1;
+}
+
+/* Анимация при Peek */
 .modal-backdrop.is-peeking .modal-content {
-  opacity: 0.1;
-  transform: translateY(10px) scale(0.98);
+  opacity: 0.15;
+  transform: translateY(15px) scale(0.96);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* --- ВНУТРЕННИЕ ЭЛЕМЕНТЫ --- */
 header {
   font-size: 1.25rem;
   font-weight: 600;
-  padding-bottom: 12px;
+  padding-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 12px;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+main {
+  flex: 1;
 }
 
 footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding-top: 12px;
+  padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 12px;
+  margin-top: 4px;
 }
 
+/* --- АНИМАЦИИ --- */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -106,14 +153,14 @@ footer {
   }
 }
 
-@keyframes slideUp {
+@keyframes modalZoomIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: scale(0.9) translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
 }
 </style>
